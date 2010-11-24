@@ -35,7 +35,10 @@ import org.grails.solr.*
 class SolrService {
 
   boolean transactional = false
-  def grailsApplication
+  
+	def grailsApplication
+	def autoCommit = true
+	
   private def servers = [:]
   
   /**
@@ -54,6 +57,15 @@ class SolrService {
     return servers[url]
   }
   
+
+	/**
+   * Calls commit of solr changes to the index
+   */
+   def commitChanges()  { 
+       return getServer().commit()
+   }
+
+
   def getStreamingUpdateServer(queueSize=20, numThreads=3) {
     def url =  (grailsApplication.config.solr?.url) ? grailsApplication.config.solr.url : "http://localhost:8983/solr"
     def server = new StreamingUpdateSolrServer( url, queueSize, numThreads)

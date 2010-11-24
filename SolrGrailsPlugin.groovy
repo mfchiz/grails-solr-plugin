@@ -115,7 +115,10 @@ open source search server through the SolrJ library.
             indexDomain(application, delegateDomainOjbect, doc)
           
             server.add(doc)
-            server.commit()
+						
+						if(solrService.autoCommit){
+            	server.commit()
+						}
 
           }
         
@@ -124,7 +127,11 @@ open source search server through the SolrJ library.
             def solrService = ctx.getBean("solrService");
             def server = solrService.getServer()
             server.deleteByQuery( "id:${delegate.class.name}-${delegate.id}");
-            server.commit()
+
+						if(solrService.autoCommit){
+            	server.commit()
+						}
+						
           }   
         
           // add deleteSolr method to domain classes
@@ -134,7 +141,11 @@ open source search server through the SolrJ library.
             def server = solrService.getServer
           
             server.addBean( delegate );
-            server.commit()
+
+						if(solrService.autoCommit){
+            	server.commit()
+						}
+						
           }
           */        
 
