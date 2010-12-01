@@ -30,6 +30,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.apache.solr.client.solrj.SolrQuery
 import org.apache.solr.client.solrj.response.QueryResponse
 import org.grails.solr.*
+import org.apache.solr.client.solrj.*
 
 
 class SolrService {
@@ -38,6 +39,7 @@ class SolrService {
   
 	def grailsApplication
 	def autoCommit = true
+	def queryMethod = SolrRequest.METHOD.POST
 	
   private def servers = [:]
   
@@ -81,6 +83,11 @@ class SolrService {
   def search(String query) {
     search( new SolrQuery( query ) )
   }
+
+  def search(String query, SolrRequest.METHOD method) {
+    search( new SolrQuery( query ), method )
+  }
+
   
   /**
   * Given SolrQuery object, execute Solr query
@@ -88,9 +95,11 @@ class SolrService {
   * @param solrQuery - SolrQuery object representating the query {@link http://lucene.apache.org/solr/api/org/apache/solr/client/solrj/SolrQuery.html}
   * @return Map with 'resultList' - list of Maps representing results and 'queryResponse' - Solrj query result
   */
-  def search(SolrQuery solrQuery) {
-    QueryResponse rsp = getServer().query( solrQuery );
+  def search(SolrQuery solrQuery, SolrRequest.METHOD method=queryMethod) {
+    QueryResponse rsp = getServer().query( solrQuery, method );
     
+		println "WWWWWWWWWWWWWWWWWWWWWW"
+		println method
 
     def results = []
     rsp.getResults().each { doc ->
